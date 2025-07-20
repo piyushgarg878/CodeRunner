@@ -39,9 +39,13 @@ export default function Home() {
         setOutput("");
         setStatus(data.error || "Unknown error");
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       setOutput("");
-      setStatus("Network or server error: " + err.message);
+      if (err instanceof Error) {
+        setStatus("Network or server error: " + err.message);
+      } else {
+        setStatus("Network or server error");
+      }
     } finally {
       setLoading(false);
     }
