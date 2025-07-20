@@ -1,100 +1,33 @@
-'use client'
-import { useState } from "react";
-import HeaderBar from "../components/HeaderBar";
-import LanguageSelector from "../components/LanguageSelector";
-import EditorPanel from "../components/EditorPanel";
-import InputBox from "../components/InputBox";
-import OutputPanel from "../components/OutputPanel";
-import Footer from "../components/Footer";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3010/api";
+"use client";
+import Link from "next/link";
 
 export default function Home() {
-  const [language, setLanguage] = useState("python");
-  const [code, setCode] = useState("");
-  const [input, setInput] = useState("");
-  const [output, setOutput] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState<string | null>(null);
-  const [editorHeight, setEditorHeight] = useState(350);
-
-  const handleRun = async () => {
-    setLoading(true);
-    setStatus("Running code...");
-    setOutput("");
-    try {
-      const res = await fetch(`${API_URL}/run`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ language, code, input }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        let out = data.output || "";
-        if (data.stderr) out += `\n[stderr]\n${data.stderr}`;
-        if (data.error) out += `\n[error]\n${data.error}`;
-        setOutput(out);
-        setStatus("Execution finished.");
-      } else {
-        setOutput("");
-        setStatus(data.error || "Unknown error");
-      }
-    } catch (err: unknown) {
-      setOutput("");
-      if (err instanceof Error) {
-        setStatus("Network or server error: " + err.message);
-      } else {
-        setStatus("Network or server error");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleClear = () => {
-    setCode("");
-    setInput("");
-    setOutput("");
-    setStatus(null);
-  };
-
   return (
-    <div style={{ minHeight: "100vh", background: "#111", color: "#fff" }}>
-      <HeaderBar />
-      <main style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: 32, gap: 32 }}>
-        <div style={{ background: "#181818", borderRadius: 16, boxShadow: "0 2px 16px #0004", padding: 36, minWidth: 350, maxWidth: 700, width: "100%", display: "flex", flexDirection: "column", gap: 28 }}>
-          <div style={{ display: "flex", gap: 18, alignItems: "center", justifyContent: "space-between" }}>
-            <LanguageSelector language={language} setLanguage={setLanguage} disabled={loading} />
-            <div style={{ display: "flex", gap: 12 }}>
-              <button
-                onClick={handleClear}
-                style={{ fontSize: 15, padding: "7px 20px", borderRadius: 7, background: "#333", color: "#fff", border: "1px solid #444", cursor: "pointer", transition: "background 0.2s" }}
-                disabled={loading}
-              >
-                Clear
-              </button>
-              <button
-                onClick={handleRun}
-                disabled={loading}
-                style={{ fontSize: 16, padding: "7px 28px", borderRadius: 7, background: loading ? "#444" : "#61dafb", color: loading ? "#bbb" : "#181818", border: "none", fontWeight: 600, cursor: loading ? "not-allowed" : "pointer", transition: "background 0.2s" }}
-              >
-                {loading ? "Running..." : "Run"}
-              </button>
-            </div>
-          </div>
-          <EditorPanel
-            language={language}
-            code={code}
-            setCode={setCode}
-            height={editorHeight}
-            setHeight={setEditorHeight}
-            disabled={loading}
-          />
-          <InputBox input={input} setInput={setInput} disabled={loading} />
-          <OutputPanel output={output} status={status} />
-        </div>
-        <Footer />
-      </main>
+    <div style={{ minHeight: "100vh", background: "#111", color: "#fff", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 32 }}>
+      <div style={{ background: "#181818", borderRadius: 16, boxShadow: "0 2px 16px #0004", padding: 48, maxWidth: 500, width: "100%", textAlign: "center", display: "flex", flexDirection: "column", gap: 28 }}>
+        <h1 style={{ fontSize: 38, fontWeight: 700, marginBottom: 8, letterSpacing: 1 }}>CodeRunner Contest</h1>
+        <p style={{ fontSize: 18, color: "#bbb", marginBottom: 0 }}>
+          Welcome to the ultimate coding contest platform!<br/>
+          Compete, solve problems, and test your code in real time.
+        </p>
+        <ul style={{ textAlign: "left", color: "#aaa", fontSize: 16, margin: "24px auto 0", maxWidth: 400, lineHeight: 1.7 }}>
+          <li>📝 Multiple languages supported (Python, C++)</li>
+          <li>⚡ Instant code execution in a safe environment</li>
+          <li>🏆 Real-time leaderboard and submissions (coming soon)</li>
+        </ul>
+        <Link href="/editor" style={{ marginTop: 16, display: "inline-block", background: "#61dafb", color: "#181818", fontWeight: 600, fontSize: 20, padding: "14px 48px", borderRadius: 8, textDecoration: "none", transition: "background 0.2s" }}>
+          Go to Code Editor
+        </Link>
+        <Link href="/contest" style={{ marginTop: 24, display: "inline-block", background: "#222", color: "#61dafb", fontWeight: 600, fontSize: 18, padding: "12px 36px", borderRadius: 8, textDecoration: "none", border: "1px solid #61dafb", transition: "background 0.2s" }}>
+          Create Contest
+        </Link>
+        <Link href="/contests" style={{ marginTop: 16, display: "inline-block", background: "#222", color: "#61dafb", fontWeight: 600, fontSize: 18, padding: "12px 36px", borderRadius: 8, textDecoration: "none", border: "1px solid #61dafb", transition: "background 0.2s" }}>
+          Join Contest
+        </Link>
+      </div>
+      <footer style={{ marginTop: 48, color: "#888", fontSize: 14, textAlign: "center" }}>
+        © {new Date().getFullYear()} CodeRunner Contest Platform
+      </footer>
     </div>
   );
 }
