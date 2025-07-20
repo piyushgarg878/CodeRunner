@@ -7,6 +7,8 @@ import InputBox from "../components/InputBox";
 import OutputPanel from "../components/OutputPanel";
 import Footer from "../components/Footer";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3010/api";
+
 export default function Home() {
   const [language, setLanguage] = useState("python");
   const [code, setCode] = useState("");
@@ -21,7 +23,7 @@ export default function Home() {
     setStatus("Running code...");
     setOutput("");
     try {
-      const res = await fetch("http://localhost:3010/api/run", {
+      const res = await fetch(`${API_URL}/run`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ language, code, input }),
