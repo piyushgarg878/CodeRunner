@@ -41,14 +41,9 @@ export default function ContestsPage() {
                 <div style={{ color: "#aaa", fontSize: 15 }}>
                   <b>Start:</b> {new Date(contest.start).toLocaleString()} &nbsp; <b>End:</b> {new Date(contest.end).toLocaleString()}
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '8px' }}>
-                  <Link href={`/contests/${contest.id}/leaderboard`} style={{ background: "#222", color: "#61dafb", fontWeight: 600, fontSize: 16, padding: "8px 28px", borderRadius: 7, textDecoration: "none", border: "1px solid #61dafb", transition: "background 0.2s" }}>
-                    Leaderboard
-                  </Link>
-                  <Link href={`/contests/${contest.id}`} style={{ background: "#61dafb", color: "#181818", fontWeight: 600, fontSize: 16, padding: "8px 28px", borderRadius: 7, textDecoration: "none", transition: "background 0.2s" }}>
-                    Join
-                  </Link>
-                </div>
+                <Link href={`/contests/${contest.id}`} style={{ marginTop: 8, alignSelf: "flex-end", background: "#61dafb", color: "#181818", fontWeight: 600, fontSize: 16, padding: "8px 28px", borderRadius: 7, textDecoration: "none", transition: "background 0.2s" }}>
+                  Join
+                </Link>
               </div>
             ))}
           </div>
