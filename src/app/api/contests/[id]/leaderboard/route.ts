@@ -1,18 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '../../../../../../lib/prisma';
 
-// Define the type for the context
-type RouteContext = {
-  params: {
-    id: string;
-  };
-};
-
 export async function GET(
   req: NextRequest,
-  context: RouteContext
-): Promise<NextResponse> {
-  const { id: contestId } = context.params;
+  { params }: { params: { id: string } }
+) {
+  const contestId = params.id;
   try {
     const submissions = await prisma.submission.findMany({
       where: { contestId: contestId },
