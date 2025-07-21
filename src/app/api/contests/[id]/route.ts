@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { prisma } from '../../../../../lib/prisma';
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(
+  req: NextRequest,
+  {params}: {params: Promise<{ id: string }>}
+) {
+  const { id } = await params;
   try {
     const contest = await prisma.contest.findUnique({
-      where: { id: params.id },
+      where: { id:id },
       include: {
         questions: {
           orderBy: {
