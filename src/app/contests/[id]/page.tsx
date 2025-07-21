@@ -16,8 +16,9 @@ async function getContest(id: string) {
   return contest;
 }
 
-export default async function ContestArenaPage({ params }: { params: { id: string } }) {
-  const contest = await getContest(params.id);
+export default async function ContestArenaPage({params}: {params: Promise<{ id: string }>}) {
+    const {id} = await params;
+  const contest = await getContest(id);
 
   if (!contest) {
     notFound();
