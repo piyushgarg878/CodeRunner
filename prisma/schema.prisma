@@ -6,10 +6,32 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/prisma"
 }
 
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
+}
+model Contest {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  start       DateTime
+  end         DateTime
+  isActive    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  questions   Question[]
+}
+
+model Question {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  contestId   String    @db.ObjectId
+  title       String
+  description String
+  testcases   Json
+  points      Int      @default(100)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  contest     Contest  @relation(fields: [contestId], references: [id])
 }
