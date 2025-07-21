@@ -1,9 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '../../../../../../lib/prisma';
 
+// Define the type for the context
+type RouteContext = {
+  params: {
+    id: string;
+  };
+};
+
 export async function GET(
   req: NextRequest,
-  context: { params: { id: string } }
+  context: RouteContext
 ): Promise<NextResponse> {
   const { id: contestId } = context.params;
   try {
